@@ -1,24 +1,48 @@
+const grid = document.querySelector(".grid");
 const container = document.querySelector(".container");
 const clear = document.querySelector(".clear");
-let gridSize = 16;
+const change = document.querySelector(".change");
+let squareSize = 8;
 
-for (let i = 0; i < gridSize * gridSize; i++) {
+createGrid(squareSize);
+
+//Create Div
+function createDiv(size) {
 	const div = document.createElement("div");
-	div.classList.add("grid");
-	div.style.width = "20px";
-	div.style.height = "20px";
-	container.append(div);
+	div.classList.add("box");
+	div.style.width = `${size}px`;
+	div.style.height = `${size}px`;
+
+	return div;
 }
 
-let grid = document.querySelectorAll(".grid");
-for (const box of grid) {
-	box.addEventListener("mouseover", () => {
-		box.style.backgroundColor = "aqua";
-	});
+//Create Grid
+function createGrid(gridSize) {
+	for (let i = 0; i < gridSize * gridSize; i++) {
+		grid.appendChild(createDiv(grid.clientWidth / gridSize));
+	}
 }
 
-clear.addEventListener("click", () => {
-	for (const box of grid) {
-		box.style.backgroundColor = "black";
-	};
+//Reset
+function reset() {
+	while (grid.firstChild) {
+		grid.removeChild(grid.lastChild);
+	}
+	createGrid(squareSize);
+}
+
+//Clear button
+clear.addEventListener("click", reset);
+
+//Change grid size
+change.addEventListener("click", () => {
+	squareSize = prompt("Enter a Grid Size");
+	reset();
+});
+
+//MouseOver Event
+grid.addEventListener("mouseover", (e) => {
+	if (e.target.matches(".box")) {
+		e.target.classList.add("active");
+	}
 });
